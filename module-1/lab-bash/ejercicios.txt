@@ -1,0 +1,53 @@
+echo 'Hello World'
+
+mkdir new_dir
+
+rm -r new_dir
+
+cp ./lorem/sed.txt ./lorem-copy
+
+cp ./lorem/at.txt ./lorem-copy; cp ./lorem/lorem.txt ./lorem-copy   #(o -> cp ./lorem/{at.txt,lorem.txt} ./lorem-copy)
+
+cat lorem/sed.txt
+
+cat lorem/at.txt; cat lorem/lorem.txt
+
+sed -n -e '1,3p' lorem-copy/sed.txt
+
+tail -3 lorem-copy/sed.txt
+
+echo "Homo homini lupus." >> lorem-copy/sed.txt
+
+tail -3 lorem-copy/sed.txt
+
+sed -i 's/et/ET/g' lorem/at.txt
+cp ./lorem/at.txt ./lorem-copy
+
+whoami
+
+pwd
+
+ls lorem/*.txt
+
+cat lorem/sed.txt | wc lorem/sed.txt 		#primera columna lineas, segunda palabras, tercera caracteres
+
+find . -name "*lorem*" -type f | wc -l
+
+grep -i et lorem/at.txt
+
+grep -i et lorem/at.txt | wc -l
+
+for file in $(ls lorem-copy/); do grep -i -o et lorem-copy/$file | wc -l; done
+
+------BOUNS------
+
+read NAME
+
+echo $NAME
+
+mkdir $NAME
+
+rm -r $NAME
+
+for file in $(ls lorem/); do length=${#file}; echo "File '$file' has $length characters"; done
+
