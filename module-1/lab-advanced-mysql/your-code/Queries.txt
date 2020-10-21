@@ -1,0 +1,30 @@
+
+
+
+SELECT ta.au_id, ta.title_id, (t.price*s.qty*t.royalty/100 *ta.royaltyper ) AS 'sales_royalty'
+FROM titleauthor AS ta
+LEFT JOIN titles AS t 
+ON ta.title_id=t.title_id
+LEFT JOIN sales AS s 
+ON ta.title_id = s.title_id
+
+
+SELECT au_id, title_id, SUM(sales_royalty) AS 'total_royalties' FROM
+( SELECT ta.au_id, ta.title_id, 
+(t.price*s.qty*t.royalty/100 *ta.royaltyper) AS 'sales_royalty'
+FROM titleauthor AS ta
+LEFT JOIN titles AS t ON ta.title_id=t.title_id
+LEFT JOIN sales AS s ON ta.title_id = s.title_id ) AS STEP1
+GROUP BY au_id, title_id
+
+SELECT output.au_id, SUM(total_royalties + IFNULL(titles.advance, 0)) AS profits
+FROM  (SELECT au_id, title_id, SUM(sales_royalty) AS 'total_royalties' FROM
+(SELECT ta.au_id, ta.title_id, (t.price*s.qty*t.royalty/100 *ta.royaltyper) AS 'sales_royalty'
+FROM titleauthor AS ta
+LEFT JOIN titles AS t ON ta.title_id=t.title_id
+LEFT JOIN sales AS s ON ta.title_id = s.title_id ) AS STEP1
+GROUP BY au_id, title_id) AS output
+LEFT JOIN titles ON output.title_id = titles.title_id
+GROUP BY output.au_id
+ORDER BY profits DESC
+LIMIT 0,3
